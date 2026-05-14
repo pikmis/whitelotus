@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>WhiteLotus — Современный стиль</title>
+    <!-- Подключение современного шрифта Google Fonts: Inter и Syne для акцента -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="background-hero">
+    <!-- основной слой с картинкой. Переменная --bg-url будет задана по умолчанию или через js -->
+    <div class="bg-image" id="dynamicBg"></div>
+    
+    <!-- слои для эффекта поделенности и затухания -->
+    <div class="slice-mask"></div>
+    <div class="fade-gradient"></div>
+    <div class="vignette-bottom"></div>
+    <div class="blur-overlay"></div>
+</div>
+
+<div class="content">
+    <!-- Главный заголовок современным шрифтом: WhiteLotus -->
+    <h1 class="logo-title">WhiteLotus</h1>
+    <button class="explore-btn" id="inspireBtn">узнать че это такое ваш вайтлотус</button>
+</div>
+
+<!-- плавный переход от фона к чёрному -->
+<div class="fade-to-black"></div>
+
+<!-- Секция с инфой — скролл сюда по клику -->
+<section class="info-section" id="infoSection">
+    <div class="info-section-inner">
+        <span class="info-eyebrow">о проекте</span>
+        <h2 class="info-section-title">что такое WhiteLotus?</h2>
+        <p class="info-section-text">WhiteLotus — тима воркеров по ебаному роблоксу, тема все еще рабочая но не в россии точно, скоро будет увеличение сфер ворка.</p>
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="info-card-icon">🌿</div>
+                <div class="info-card-label">че поч именно мы</div>
+                <div class="info-card-desc">ну мы крутые и имеем более 4 лет в этой сфере</div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon">✦</div>
+                <div class="info-card-label">скок стоят методы</div>
+                <div class="info-card-desc">75 рублей бро очень дешево братиш</div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon">◎</div>
+                <div class="info-card-label">хз</div>
+                <div class="info-card-desc">ну мы крутые пж</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>

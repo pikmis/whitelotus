@@ -1,0 +1,432 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background: #000;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* КОНТЕЙНЕР С ПОДЕЛЕННЫМ, ЗАТУХАЮЩИМ ФОНОМ */
+/* Эффект "разделённого" и "затухающего" создаётся с помощью двух слоёв:
+   1) основной бэкграунд-слой (картинка, которую закинет пользователь)
+   2) наложение полупрозрачных градиентных масок и геометрических разделителей,
+      которые создают "поделенность" (секции/полосы) и затухание к краям */
+.background-hero {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    will-change: opacity;
+}
+
+/* Сам фон — подставьте сюда своё изображение через CSS или динамически */
+.bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://i.pinimg.com/1200x/ed/11/6e/ed116e818eef98d3b034444eabbbd835.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(0.4) saturate(1.1);
+    transition: transform 0.2s ease-out, background-image 0.4s ease;
+    will-change: transform;
+}
+
+/* Эффект "поделенности" — геометрические диагональные / горизонтальные линии с масками */
+.division-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        115deg,
+        rgba(0, 0, 0, 0.38) 0px,
+        rgba(0, 0, 0, 0.38) 1px,
+        transparent 1px,
+        transparent 8%,
+        rgba(255, 255, 255, 0.05) 8%,
+        rgba(255, 255, 255, 0.05) 9%,
+        transparent 9%,
+        transparent 16%
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Дополнительные диагональные секции — создают поделённость как "разрезанные блоки" */
+.slice-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(125deg, 
+        rgba(0,0,0,0.2) 0%, 
+        transparent 35%,
+        transparent 65%,
+        rgba(0,0,0,0.25) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Эффект затухания по краям и между секциями */
+.fade-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at 50% 30%, rgba(0,0,0,0) 40%, rgba(5,11,18,0.65) 90%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Дополнительная полосатость/затухание снизу вверх */
+.vignette-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, rgba(5, 11, 18, 0.75), transparent);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Лёгкое размытие на некоторых зонах для современного "затухающего" эстетик */
+.blur-overlay {
+    position: absolute;
+    bottom: -10%;
+    right: -10%;
+    width: 60%;
+    height: 60%;
+    background: rgba(255, 255, 255, 0.02);
+    filter: blur(80px);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* КОНТЕНТ - поверх всего */
+.content {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    backdrop-filter: blur(1px); /* лёгкий, почти незаметный эффект, чтобы текст читался */
+}
+
+/* Стиль заголовка - WhiteLotus современный, мощный */
+.logo-title {
+    font-family: 'Syne', 'Inter', sans-serif;
+    font-size: clamp(3.5rem, 15vw, 9rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #FFF, #E0E7FF);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+    animation: subtleGlow 3s infinite alternate;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s;
+}
+
+/* Дополнительный вариант, если градиент не подходит — запасной цвет */
+@supports not (background-clip: text) {
+    .logo-title {
+        color: #f0f3fa;
+        text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    }
+}
+
+@keyframes subtleGlow {
+    0% {
+        text-shadow: 0 0 5px rgba(255,255,240,0.3);
+        opacity: 0.98;
+    }
+    100% {
+        text-shadow: 0 0 25px rgba(255,245,210,0.6);
+        opacity: 1;
+    }
+}
+
+/* Короткий описательный текст для эстетики */
+.tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1rem, 4vw, 1.4rem);
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,245,0.85);
+    background: rgba(10, 20, 30, 0.4);
+    backdrop-filter: blur(12px);
+    display: inline-block;
+    padding: 0.6rem 1.8rem;
+    border-radius: 60px;
+    border: 1px solid rgba(255,255,255,0.2);
+    margin-top: 0.5rem;
+}
+
+/* Небольшая кнопка или интерактив, просто для стиля (современно) */
+.explore-btn {
+    margin-top: 2.5rem;
+    font-family: 'Syne', 'Inter', sans-serif;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 0.8rem 2rem;
+    border-radius: 2rem;
+    color: white;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: transform 0.2s, background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.explore-btn:hover {
+    background: rgba(255,255,255,0.25);
+    transform: scale(1.02);
+    border-color: rgba(255,255,245,0.8);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* декоративный элемент — подчеркивание стильное */
+.lotus-icon {
+    margin-top: 2rem;
+    font-size: 1.8rem;
+    opacity: 0.7;
+    letter-spacing: 4px;
+    color: rgba(255,250,210,0.8);
+}
+
+/* гарантия читаемости на любом фоне */
+@media (max-width: 720px) {
+    .content {
+        padding: 1.5rem;
+    }
+    .tagline {
+        letter-spacing: 0.15em;
+    }
+}
+
+/* добавляем эффект "поделенности" также с помощью полос поверх контента? нет, но чтобы усилить восприятие — сделаем лёгкую сетку
+но только на заднем плане, не мешая тексту */
+.grid-subtle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* плавное появление контента */
+.content > * {
+    animation: fadeInUp 0.9s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* настройка для интерактива с фоном (по желанию пользователя, если захочет сменить) */
+.bg-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 20;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    padding: 6px 12px;
+    border-radius: 32px;
+    font-size: 12px;
+    color: white;
+    font-family: monospace;
+    cursor: pointer;
+    transition: 0.2s;
+    border: 1px solid rgba(255,255,255,0.3);
+    opacity: 0.7;
+}
+.bg-controls:hover {
+    opacity: 1;
+    background: rgba(0,0,0,0.7);
+}
+input#bgUpload {
+    display: none;
+}
+.bg-controls label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* стили для тост-сообщений */
+.custom-toast {
+    transition: opacity 0.3s ease;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.2);
+    font-weight: 500;
+    backdrop-filter: blur(16px);
+    background: rgba(15, 25, 35, 0.8);
+    border: 1px solid rgba(255, 255, 245, 0.25);
+    pointer-events: none;
+}
+
+/* плавный переход от фото-фона к чёрному */
+.fade-to-black {
+    position: relative;
+    z-index: 10;
+    height: 40vh;
+    background: linear-gradient(to bottom, transparent 0%, #000 100%);
+    pointer-events: none;
+}
+
+/* инфо-секция — отдельный экран ниже */
+.info-section {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem;
+    background: #000;
+}
+
+.info-section-inner {
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    animation: fadeInUp 0.9s ease forwards;
+}
+
+.info-eyebrow {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255, 245, 200, 0.6);
+    display: block;
+    margin-bottom: 1.2rem;
+}
+
+.info-section-title {
+    font-family: 'Syne', 'Inter', sans-serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.2rem;
+    background: linear-gradient(135deg, #fff, #c8d8ff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.info-section-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.75;
+    margin-bottom: 3rem;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    padding: 1.5rem 1rem;
+    backdrop-filter: blur(10px);
+    transition: background 0.3s, transform 0.3s;
+}
+
+.info-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-4px);
+}
+
+.info-card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.7rem;
+    opacity: 0.85;
+}
+
+.info-card-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 250, 220, 0.9);
+    margin-bottom: 0.4rem;
+}
+
+.info-card-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .info-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* на маленьких экранах убираем параллакс для производительности */
+@media (max-width: 768px) {
+    .bg-image {
+        transform: none !important;
+    }
+}
+
+/* Улучшенная читаемость на очень ярких фонах через легкую тень текста */
+.logo-title {
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+}
+/* но эффект поделённости и затухания остается на всех устройствах */
