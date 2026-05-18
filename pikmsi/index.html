@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pikmis | whitelotus.one</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            background-image: url('https://r2.guns.lol/23504937-89a6-4c54-be3c-a1d45e62da60.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 1;
+        }
+
+        /* Экран ЗАСТАВКИ (Click to Enter) */
+        #enter-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #enter-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://r2.guns.lol/23504937-89a6-4c54-be3c-a1d45e62da60.gif');
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px);
+            opacity: 0.3;
+        }
+
+        .enter-text {
+            position: relative;
+            z-index: 1000;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            animation: pulse 2s infinite ease-in-out;
+            user-select: none;
+            margin-bottom: 10px;
+        }
+
+        .track-info-overlay {
+            position: relative;
+            z-index: 1000;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            user-select: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        /* КАРТОЧКА ПРОФИЛЯ */
+        .profile-card {
+            position: relative;
+            z-index: 2;
+            background: rgba(10, 10, 12, 0.45);
+            backdrop-filter: blur(10px) saturate(140%);
+            -webkit-backdrop-filter: blur(10px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            width: 460px;
+            padding: 40px 30px;
+            border-radius: 16px;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 255, 255, 0.02);
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .profile-card.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .profile-card:hover {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.04), 0 0 20px rgba(255, 255, 255, 0.01);
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 115px;
+            height: 115px;
+            margin: 0 auto 20px auto;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .username {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+            color: #fff;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+        }
+
+        .description {
+            font-size: 13px;
+            color: #b3b3b3;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 5px;
+        }
+
+        .social-icon {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 20px;
+            text-decoration: none;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .social-icon:hover {
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .views-counter {
+            position: absolute;
+            bottom: 18px;
+            left: 22px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            .profile-card {
+                width: 92%;
+                padding: 35px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="enter-overlay" onclick="startPage()">
+        <div class="enter-text">click to enter...</div>
+    </div>
+
+    <div class="profile-card" id="main-card">
+        <div class="avatar-container">
+            <img class="avatar" src="https://r2.guns.lol/50fa2701-4712-46d3-8594-edac8b8c3984.gif" alt="Avatar">
+        </div>
+
+        <div class="username" id="profile-name"></div>
+        <div class="description" id="profile-bio"></div>
+
+        <div class="social-links" id="social-container"></div>
+
+        <div class="views-counter">
+            <i class="fa-regular fa-eye"></i> <span id="views-count">0</span>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================================
+        // НАСТРОЙКИ
+        // ==========================================================
+        const CONFIG = {
+            username: "pikmis",         
+            bio: "школьник, frontend, backend, java, люблю играт в майнкрафт", 
+            counterKey: "pikmis_whitelotus_final_v1", 
+
+            links: [
+                { icon: "fa-brands fa-telegram",   url: "https://t.me/pikmizs" },
+                { icon: "fa-brands fa-github",     url: "https://github.com/pikmis" },
+            ]
+        };
+
+        // Заполняем данные карточки
+        document.getElementById('profile-name').innerText = CONFIG.username;
+        document.getElementById('profile-bio').innerText = CONFIG.bio;
+
+        const container = document.getElementById('social-container');
+        CONFIG.links.forEach(link => {
+            const a = document.createElement('a');
+            a.href = link.url;
+            a.target = "_blank"; 
+            a.className = "social-icon";
+            a.innerHTML = `<i class="${link.icon}"></i>`;
+            container.appendChild(a);
+        });
+
+        // Глобальная переменная для плеера
+        let player = null;
+
+        // ==========================================================
+        // КЛИК И ЗАПУСК СТРАНИЦЫ
+        // ==========================================================
+        function startPage() {
+            // Убираем заставку
+            const overlay = document.getElementById('enter-overlay');
+            overlay.style.opacity = '0';
+            overlay.style.visibility = 'hidden';
+
+            // Показываем профиль
+            document.getElementById('main-card').classList.add('visible');
+
+            // СОЗДАЕМ И ИНИЦИАЛИЗИРУЕМ АУДИО НАПРЯМУЮ ИЗ ФАЙЛА zxc.mp3
+            try {
+                player = new Audio("zxc.mp3");
+                player.loop = true;
+                player.volume = 0.4;
+                
+                // Жестко пинаем воспроизведение внутри клика
+                player.play().catch(err => {
+                    console.log("Браузер всё равно заблочил плеер:", err);
+                });
+            } catch (e) {
+                console.log("Не удалось создать аудио-объект:", e);
+            }
+
+            // Запускаем счетчик
+            handleViews();
+        }
+
+        // ==========================================================
+        // УМНЫЙ СЧЕТЧИК ПРОСМОТРОВ
+        // ==========================================================
+        async function handleViews() {
+            const viewsElement = document.getElementById('views-count');
+            const storageKey = `visited_${CONFIG.counterKey}`;
+            const hasVisited = localStorage.getItem(storageKey);
+            
+            const isHit = hasVisited ? 0 : 1;
+
+            if (!hasVisited) {
+                localStorage.setItem(storageKey, 'true');
+            }
+
+            try {
+                const response = await fetch(`https://api.moeounter.org/hit/whitelotus/${CONFIG.counterKey}?inc=${isHit}`);
+                if (!response.ok) throw new Error("API Offline");
+                
+                const data = await response.json();
+                if (data && data.value) {
+                    viewsElement.innerText = Number(data.value).toLocaleString('ru-RU');
+                    return;
+                }
+                throw new Error("Invalid format");
+
+            } catch (err) {
+                let localCount = parseInt(localStorage.getItem('local_counter_db') || '145');
+                if (!hasVisited) {
+                    localCount++;
+                    localStorage.setItem('local_counter_db', localCount);
+                }
+                viewsElement.innerText = localCount.toLocaleString('ru-RU');
+            }
+        }
+    </script>
+</body>
+</html>
